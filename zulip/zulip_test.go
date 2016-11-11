@@ -8,7 +8,6 @@ package zulip
 import (
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"testing"
 )
 
@@ -21,16 +20,9 @@ var (
 func setup() {
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
-	client = NewClient(nil)
-
-	url, _ := url.Parse(server.URL)
-	client.BaseURL = url
+	client = NewClient(nil, server.URL)
 }
 
-func TestNewClient(t *testing.T) {
-	c := NewClient(nil)
-
-	if got, want := c.BaseURL.String(), defaultBaseURL; got != want {
-		t.Errorf("NewClient BaseURL is %v, want %v", got, want)
-	}
+func teardown() {
+	server.Close()
 }

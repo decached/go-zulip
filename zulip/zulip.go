@@ -6,28 +6,31 @@
 package zulip
 
 import (
+	"github.com/dghubble/sling"
 	"net/http"
-	"net/url"
-)
-
-const (
-	defaultBaseURL = "https://api.zulip.com/v1/"
+	"time"
 )
 
 type Client struct {
-	BaseURL *url.URL
-	Email   string
-	APIKey  string
-	client  *http.Client
+	client   *http.Client
+	sling    *sling.Sling
+	Email    string
+	APIKey   string
 }
 
-func NewClient(httpClient *http.Client) *Client {
+type service struct {
+	client *Client
+}
+
+func NewClient(httpClient *http.Client, baseURL string) *Client {
 	if httpClient == nil {
-		httpClient = http.DefaultClient
+		httpClient = &http.Client{
+			Timeout: time.Second * 10,
+		}
 	}
 
-	baseURL, _ := url.Parse(defaultBaseURL)
+	s := sling.New().Client(httpClient).Base(baseURL)
+	c := &Client{sling: s}
 
-	c := &Client{client: httpClient, BaseURL: baseURL}
 	return c
 }
