@@ -16,6 +16,8 @@ type Client struct {
 	sling    *sling.Sling
 	Email    string
 	APIKey   string
+	common   service
+	Messages *MessagesService
 }
 
 type service struct {
@@ -31,6 +33,9 @@ func NewClient(httpClient *http.Client, baseURL string) *Client {
 
 	s := sling.New().Client(httpClient).Base(baseURL)
 	c := &Client{sling: s}
+
+	c.common.client = c
+	c.Messages = (*MessagesService)(&c.common)
 
 	return c
 }
