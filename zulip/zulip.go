@@ -25,7 +25,7 @@ type service struct {
 	client *Client
 }
 
-func NewClient(httpClient *http.Client, baseURL string) *Client {
+func New(httpClient *http.Client, baseURL string) *Client {
 	if httpClient == nil {
 		httpClient = &http.Client{
 			Timeout: time.Second * 10,

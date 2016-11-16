@@ -8,7 +8,6 @@ package zulip
 import (
 	"net/http"
 	"net/http/httptest"
-	"testing"
 )
 
 var (
@@ -20,7 +19,7 @@ var (
 func setup() {
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
-	client = NewClient(nil, server.URL)
+	client = New(nil, server.URL)
 }
 
 func teardown() {
