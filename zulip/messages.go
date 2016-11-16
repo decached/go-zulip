@@ -8,9 +8,9 @@ package zulip
 type MessagesService service
 
 type MessageResponse struct {
-	msg    string
-	result string
-	ID     int64
+	Msg    string `json:"msg"`
+	Result string `json:"result"`
+	ID     int64  `json:"id"`
 }
 
 type MessageRequest struct {
@@ -20,19 +20,19 @@ type MessageRequest struct {
 	Content string `json:"content"`
 }
 
-func (s *MessagesService) Send(type_ string, to string, subject string, content string) (ID int64, err error) {
+func (s *MessagesService) Send(type_ string, to string, subject string, content string) (_ int64, err error) {
 	body := &MessageRequest{
 		Type:    type_,
 		To:      to,
 		Subject: subject,
 		Content: content,
 	}
-	mResponse := new(MessageResponse)
+	resp := new(MessageResponse)
 
-	_, err = s.client.sling.New().Post("messages").BodyJSON(body).Receive(mResponse, nil)
+	_, err = s.client.sling.New().Post("messages").BodyJSON(body).Receive(resp, nil)
 	if err != nil {
 		return 0, err
 	}
 
-	return mResponse.ID, err
+	return resp.ID, err
 }
