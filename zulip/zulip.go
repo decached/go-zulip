@@ -18,6 +18,7 @@ type Client struct {
 	APIKey   string
 	common   service
 	Messages *MessagesService
+	Events   *EventsService
 }
 
 type service struct {
@@ -36,6 +37,7 @@ func NewClient(httpClient *http.Client, baseURL string) *Client {
 
 	c.common.client = c
 	c.Messages = (*MessagesService)(&c.common)
+	c.Events = (*EventsService)(&c.common)
 
 	return c
 }
